@@ -1,9 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { Edit, History } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+import { useAuth } from '@/contexts/AuthContext';
 
 interface DetailActionsProps {
   id: string;
@@ -11,13 +14,20 @@ interface DetailActionsProps {
 }
 
 const DetailActions = ({ id, type }: DetailActionsProps) => {
+  const { user } = useAuth();
+  const router = useRouter(); // Need to import useRouter
+
   const handleEditClick = () => {
-    toast.error('수정하려면 로그인이 필요합니다.', {
-      style: {
-        background: '#333',
-        color: '#fff',
-      },
-    });
+    if (!user) {
+      toast.error('수정하려면 로그인이 필요합니다.', {
+        style: {
+          background: '#333',
+          color: '#fff',
+        },
+      });
+      return;
+    }
+    router.push(`/${type}/${id}/edit`);
   };
 
   return (

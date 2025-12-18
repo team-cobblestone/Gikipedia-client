@@ -48,13 +48,13 @@ const HistoryPage = async ({ id, type }: HistoryPageProps) => {
         {revisions?.map((rev) => (
           <div key={rev.id} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
             <div className="mb-2 flex items-center justify-between">
-              <span className="font-bold text-[#003366]">Version {rev.version}</span>
+              <span className="font-bold text-[#003366]">Version {rev.revision_number}</span>
               <span className="text-sm text-gray-500">
                 {new Date(rev.created_at).toLocaleString()}
               </span>
             </div>
             <div className="text-sm text-gray-700">
-              <span className="font-medium">수정 내용:</span> {rev.change_summary || '내용 없음'}
+              <span className="font-medium">수정 요약:</span> {rev.change_summary || '없음'}
             </div>
             <div className="mt-3 flex items-center justify-between">
               <div className="text-xs text-gray-400">수정자: {rev.created_by || '익명'}</div>

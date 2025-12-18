@@ -31,7 +31,9 @@ const RevisionDetailPage = async ({ id, revId, type }: RevisionDetailPageProps) 
             <ArrowLeft className="h-4 w-4" /> 목록으로 돌아가기
           </Link>
         </div>
-        <h1 className="text-3xl font-bold text-[#003366]">과거 버전 보기 (v{revision.version})</h1>
+        <h1 className="text-3xl font-bold text-[#003366]">
+          과거 버전 보기 (v{revision.revision_number})
+        </h1>
         <div className="mt-4 flex items-center gap-4 text-sm text-gray-600">
           <div className="rounded border border-gray-100 bg-gray-50 px-4 py-2">
             수정일 : {new Date(revision.created_at).toLocaleString()}

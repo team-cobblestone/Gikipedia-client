@@ -8,7 +8,7 @@ const StudentPage = async () => {
   const { data: students } = await supabase
     .from('students')
     .select('*')
-    .order('generation', { ascending: false });
+    .order('name', { ascending: true });
 
   return (
     <div className="flex flex-col gap-6">
@@ -42,7 +42,16 @@ const StudentPage = async () => {
                 </div>
                 <div className="flex gap-4">
                   <p className="line-clamp-2 flex-1 text-sm leading-relaxed text-gray-700">
-                    {student.description || '자기소개가 없습니다.'}
+                    {student.content
+                      ? student.content
+                          .replace(/#{1,6}\s/g, '') // 헤딩 제거
+                          .replace(/\*\*(.+?)\*\*/g, '$1') // 볼드 제거
+                          .replace(/\*(.+?)\*/g, '$1') // 이탤릭 제거
+                          .replace(/\[(.+?)\]\(.+?\)/g, '$1') // 링크 제거
+                          .replace(/`(.+?)`/g, '$1') // 코드 제거
+                          .replace(/\n/g, ' ') // 줄바꿈을 공백으로
+                          .trim()
+                      : '자기소개가 없습니다.'}
                   </p>
                   {student.image_url && <div className="h-20 w-32 rounded bg-gray-200"></div>}
                 </div>
