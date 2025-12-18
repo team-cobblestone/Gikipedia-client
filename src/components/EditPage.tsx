@@ -44,11 +44,11 @@ const EditPage = ({ id, type }: EditPageProps) => {
       }
 
       // Dynamic table access
-      const { data, error } = (await supabase
+      const { data, error } = await supabase
         .from(tableName)
         .select(`*, ${titleField}`)
         .eq('id', id)
-        .single()) as any;
+        .single();
 
       if (error) {
         toast.error('문서를 불러오는데 실패했습니다.');
@@ -107,7 +107,7 @@ const EditPage = ({ id, type }: EditPageProps) => {
         change_summary: summary,
         revision_number: nextVersion,
         created_by: user.user_metadata.full_name || user.email?.split('@')[0] || 'Unknown',
-      } as any);
+      });
 
       if (revisionError) {
         console.error('Revision insert failed:', revisionError);

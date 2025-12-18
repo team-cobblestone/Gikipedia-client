@@ -10,11 +10,11 @@ interface HistoryPageProps {
 }
 
 const HistoryPage = async ({ id, type }: HistoryPageProps) => {
-  const { data: revisions } = (await supabase
+  const { data: revisions } = await supabase
     .from('document_revisions')
     .select('*')
     .eq('document_id', id)
-    .order('created_at', { ascending: false })) as any;
+    .order('created_at', { ascending: false });
 
   // Get current document title for header
   let title = '문서';
@@ -45,7 +45,7 @@ const HistoryPage = async ({ id, type }: HistoryPageProps) => {
       </div>
 
       <div className="space-y-4">
-        {revisions?.map((rev: any) => (
+        {revisions?.map((rev) => (
           <div key={rev.id} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
             <div className="mb-2 flex items-center justify-between">
               <span className="font-bold text-[#003366]">Version {rev.revision_number}</span>

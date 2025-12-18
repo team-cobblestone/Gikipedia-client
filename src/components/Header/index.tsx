@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -69,9 +70,11 @@ const Header = () => {
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
                 {user.user_metadata.avatar_url ? (
-                  <img
+                  <Image
                     src={user.user_metadata.avatar_url}
                     alt={user.user_metadata.full_name || 'User'}
+                    width={32}
+                    height={32}
                     className="h-8 w-8 rounded-full border border-gray-200"
                   />
                 ) : (

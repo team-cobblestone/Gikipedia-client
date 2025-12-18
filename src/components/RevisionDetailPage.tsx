@@ -13,11 +13,11 @@ interface RevisionDetailPageProps {
 }
 
 const RevisionDetailPage = async ({ id, revId, type }: RevisionDetailPageProps) => {
-  const { data: revision } = (await supabase
+  const { data: revision } = await supabase
     .from('document_revisions')
     .select('*')
     .eq('id', revId)
-    .single()) as any;
+    .single();
 
   if (!revision) {
     notFound();
