@@ -1,7 +1,7 @@
-import { Sidebar } from 'lucide-react';
 import type { Metadata } from 'next';
+import { Toaster } from 'react-hot-toast';
 
-import { Footer, Header } from '@/components';
+import { Footer, Header, Sidebar } from '@/components';
 import { TanStackProvider } from '@/lib';
 import '@/styles/globals.css';
 
@@ -32,6 +32,7 @@ const RootLayout = ({
             </div>
           </div>
           <Footer />
+          <Toaster />
         </TanStackProvider>
       </body>
     </html>

@@ -1,8 +1,15 @@
+import Link from 'next/link';
+
 import { ChevronDown } from 'lucide-react';
 
-import { CLUBS_2025 } from '@/lib';
+import { supabase } from '@/lib/supabase/client';
 
-const ClubPage = () => {
+const ClubPage = async () => {
+  const { data: clubs } = await supabase
+    .from('clubs')
+    .select('*')
+    .order('name', { ascending: true });
+
   return (
     <div className="flex flex-col gap-6">
       <div className="border-b border-gray-200 pb-4">
@@ -19,19 +26,28 @@ const ClubPage = () => {
             <ChevronDown className="h-6 w-6" /> 2025년 전공 동아리
           </h2>
           <div className="space-y-6">
-            {CLUBS_2025.map((club) => (
-              <div key={club.id} className="border-b border-gray-100 pb-6 last:border-0">
+            {clubs?.map((club) => (
+              <Link
+                href={`/club/${club.id}`}
+                key={club.id}
+                className="block border-b border-gray-100 pb-6 transition-opacity last:border-0 hover:opacity-70"
+              >
                 <div className="flex items-start justify-between">
                   <h3 className="mb-1 text-lg font-bold text-[#003366]">
                     {club.name}{' '}
                     <span className="ml-1 text-xs font-normal text-gray-400">
-                      최근 수정일 · {club.updatedAt}
+                      등록일 · {new Date(club.created_at).toLocaleDateString()}
                     </span>
                   </h3>
                 </div>
-                <p className="text-sm leading-relaxed text-gray-700">{club.description}</p>
-              </div>
+                <p className="line-clamp-2 text-sm leading-relaxed text-gray-700">
+                  {club.description || '설명이 없습니다.'}
+                </p>
+              </Link>
             ))}
+            {!clubs?.length && (
+              <div className="py-10 text-center text-gray-500">등록된 동아리가 없습니다.</div>
+            )}
           </div>
         </div>
       </div>

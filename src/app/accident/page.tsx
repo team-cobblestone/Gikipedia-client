@@ -1,8 +1,15 @@
+import Link from 'next/link';
+
 import { ChevronDown, QrCode } from 'lucide-react';
 
-import { ACCIDENTS_2025 } from '@/lib';
+import { supabase } from '@/lib/supabase/client';
 
-const AccidentPage = () => {
+const AccidentPage = async () => {
+  const { data: accidents } = await supabase
+    .from('accidents')
+    .select('*')
+    .order('occurred_at', { ascending: false });
+
   return (
     <div className="flex flex-col gap-6">
       <div className="border-b border-gray-200 pb-4">
@@ -19,26 +26,33 @@ const AccidentPage = () => {
             <ChevronDown className="h-6 w-6" /> 2025년 사건/사고
           </h2>
           <div className="space-y-6">
-            {ACCIDENTS_2025.map((accident) => (
-              <div key={accident.id} className="border-b border-gray-100 pb-6 last:border-0">
+            {accidents?.map((accident) => (
+              <Link
+                href={`/accident/${accident.id}`}
+                key={accident.id}
+                className="block border-b border-gray-100 pb-6 transition-opacity last:border-0 hover:opacity-70"
+              >
                 <div className="flex items-start justify-between">
                   <h3 className="mb-1 text-lg font-bold text-[#003366]">
                     {accident.title}{' '}
                     <span className="ml-1 text-xs font-normal text-gray-400">
-                      최근 수정일 · {accident.updatedAt}
+                      발생일 · {accident.occurred_at}
                     </span>
                   </h3>
                 </div>
                 <div className="flex gap-4">
-                  <p className="flex-1 text-sm leading-relaxed text-gray-700">
-                    {accident.description}
+                  <p className="line-clamp-2 flex-1 text-sm leading-relaxed text-gray-700">
+                    {accident.description || '내용이 없습니다.'}
                   </p>
-                  <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded border border-yellow-200 bg-yellow-50 text-yellow-600">
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded border border-yellow-200 bg-yellow-50 text-yellow-600">
                     <QrCode className="h-10 w-10" />
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
+            {!accidents?.length && (
+              <div className="py-10 text-center text-gray-500">등록된 사건/사고가 없습니다.</div>
+            )}
           </div>
         </div>
       </div>
