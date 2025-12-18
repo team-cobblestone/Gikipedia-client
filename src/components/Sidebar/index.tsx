@@ -33,7 +33,7 @@ const Sidebar = async () => {
               className="flex cursor-pointer items-center justify-between px-4 py-3 transition-colors hover:bg-gray-50"
             >
               <span className="truncate font-medium text-gray-800">{item.title}</span>
-              <span className="shrink-0 text-xs text-gray-500">{getTimeAgo(item.created_at)}</span>
+              <span className="shrink-0 text-xs text-gray-500">{getTimeAgo(item.updated_at)}</span>
             </Link>
           ))}
           {!recentChanges?.length && (
