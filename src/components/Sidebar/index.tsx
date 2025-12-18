@@ -4,6 +4,20 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { supabase } from '@/lib/supabase/client';
 
+const getTimeAgo = (date: string) => {
+  const now = new Date();
+  const past = new Date(date);
+  const diffInMs = now.getTime() - past.getTime();
+  const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+  if (diffInMinutes < 1) return '방금 전';
+  if (diffInMinutes < 60) return `${diffInMinutes}분 전`;
+  if (diffInHours < 24) return `${diffInHours}시간 전`;
+  return `${diffInDays}일 전`;
+};
+
 const Sidebar = async () => {
   const { data: recentChanges } = await supabase.from('recent_changes_view').select('*').limit(10);
 
@@ -19,9 +33,7 @@ const Sidebar = async () => {
               className="flex cursor-pointer items-center justify-between px-4 py-3 transition-colors hover:bg-gray-50"
             >
               <span className="truncate font-medium text-gray-800">{item.title}</span>
-              <span className="shrink-0 text-xs text-gray-500">
-                {new Date(item.created_at).toLocaleDateString()}
-              </span>
+              <span className="shrink-0 text-xs text-gray-500">{getTimeAgo(item.created_at)}</span>
             </Link>
           ))}
           {!recentChanges?.length && (
