@@ -1,8 +1,15 @@
+import Link from 'next/link';
+
 import { ChevronDown } from 'lucide-react';
 
-import { STUDENTS_2025 } from '@/lib';
+import { supabase } from '@/lib/supabase/client';
 
-const StudentPage = () => {
+const StudentPage = async () => {
+  const { data: students } = await supabase
+    .from('students')
+    .select('*')
+    .order('generation', { ascending: false });
+
   return (
     <div className="flex flex-col gap-6">
       <div className="border-b border-gray-200 pb-4">
@@ -19,24 +26,31 @@ const StudentPage = () => {
             <ChevronDown className="h-6 w-6" /> 2025년 학생
           </h2>
           <div className="space-y-6">
-            {STUDENTS_2025.map((student) => (
-              <div key={student.id} className="border-b border-gray-100 pb-6 last:border-0">
+            {students?.map((student) => (
+              <Link
+                href={`/student/${student.id}`}
+                key={student.id}
+                className="block border-b border-gray-100 pb-6 transition-opacity last:border-0 hover:opacity-70"
+              >
                 <div className="flex items-start justify-between">
                   <h3 className="mb-1 text-lg font-bold text-[#003366]">
                     {student.name}{' '}
                     <span className="ml-1 text-xs font-normal text-gray-400">
-                      최근 수정일 · {student.updatedAt}
+                      기수 : {student.generation}기
                     </span>
                   </h3>
                 </div>
                 <div className="flex gap-4">
-                  <p className="flex-1 text-sm leading-relaxed text-gray-700">
-                    {student.description}
+                  <p className="line-clamp-2 flex-1 text-sm leading-relaxed text-gray-700">
+                    {student.description || '자기소개가 없습니다.'}
                   </p>
-                  {student.image && <div className="h-20 w-32 rounded bg-gray-200"></div>}
+                  {student.image_url && <div className="h-20 w-32 rounded bg-gray-200"></div>}
                 </div>
-              </div>
+              </Link>
             ))}
+            {!students?.length && (
+              <div className="py-10 text-center text-gray-500">등록된 학생이 없습니다.</div>
+            )}
           </div>
         </div>
       </div>
